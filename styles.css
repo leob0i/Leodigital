@@ -1,0 +1,328 @@
+/* Perustyylit */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  overflow-x: hidden;
+}
+
+/* Hero-osa */
+#hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0 1rem;
+}
+
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: auto; /* tärkein lisäys */
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  animation: fadeSlideIn 1.5s ease-out;
+}
+
+.hero-content h1 {
+  font-size: 3rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.hero-content .highlight {
+  color: #00e6e6;
+}
+
+.tagline {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.cta-button {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: #00e6e6;
+  color: #000;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.cta-button:hover {
+  background: #00cccc;
+  transform: scale(1.05);
+}
+
+/* Portfolio & muut osiot */
+section {
+  padding: 4rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+section h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #00e6e6;
+}
+
+.projects {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.project-card {
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.card-content {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-content h3 {
+  margin-bottom: 0.75rem;
+  color: #00e6e6;
+  font-size: 1.3rem;
+}
+
+.card-content p {
+  flex-grow: 1;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  color: #e0e0e0;
+}
+
+.card-content a {
+  align-self: start;
+  background: #00e6e6;
+  color: #000;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.3s;
+}
+
+.card-content a:hover {
+  background: #00cccc;
+}
+
+.project-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+}
+
+a {
+  color: #00e6e6;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Palvelut-osio ===== */
+
+#palvelut {
+  padding: 4rem 2rem;
+  color: white;
+}
+
+#palvelut h2 {
+  text-align: center;
+  font-size: 2.4rem;
+  margin-bottom: 2.5rem;
+  color: #00e6e6;
+}
+
+.palvelu-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.palvelu-kortti {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); /* <- sama kuin project-card */
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.palvelu-kortti:hover {
+  transform: translateY(-6px); /* Sama korkeus */
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4); /* Sama varjo */
+}
+
+
+.palvelu-kortti h3 span {
+  color: #00e6e6;
+}
+
+
+
+#tyotapa {
+  padding: 4rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+}
+
+#tyotapa h2 {
+  font-size: 2rem;
+  color: #00e6e6;
+  margin-bottom: 1.5rem;
+}
+
+.intro-text, .cta-teksti {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.tyotapa-lista {
+  list-style: none;
+  padding-left: 0;
+  text-align: left;
+  max-width: 600px;
+  margin: 0 auto 2rem auto;
+}
+
+.tyotapa-lista li {
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+.keskita {
+  text-align: center;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: rgba(15, 32, 39, 0.85);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
+.nav-logo {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #00e6e6;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #00e6e6;
+}
+
+/* pieni yläreunan tila ettei sisältö mene navbarin alle */
+body {
+  padding-top: 70px;
+}
+
+
+/* Animaatio */
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsiivisuus */
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 2.2rem;
+  }
+
+  .tagline {
+    font-size: 1rem;
+  }
+}
+
+#contact {
+  padding: 5rem 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  color: #fff;
+}
+
+.contact-text {
+  font-size: 1.4rem;
+  margin-top: 1rem;
+}
+
+.email-plain {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #00e6e6;
+}
+
+html {
+  scroll-behavior: smooth;
+}
