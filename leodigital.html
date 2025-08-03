@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leo Apell | Digital Solutions</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+    <style>
+    #particles-js {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: auto; /* Mahdollistaa hiiren liikkeen rekisteröinnin */
+    }
+
+    body > *:not(#particles-js) {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+
+
+  <div id="particles-js"></div>
+
+  <div id="hero">
+    <div class="hero-content">
+      <h1>Terve! Olen <span class="highlight">Leo Apell</span></h1>
+      <p class="tagline">Sovelluskehittäjä • Koodari • Fullstack • Luova ongelmanratkaisija</p>
+      <a href="#palvelut" class="cta-button">Tutustu palveluihini</a>
+
+    </div>
+  </div>
+
+
+
+  <section id="about">
+    <h2>Minusta</h2>
+    <p>
+      Olen intohimoinen kehittäjä, jolla on kokemusta moderneista web- ja mobiilisovelluksista.
+      Rakennan käyttäjäystävällisiä ja tehokkaita sovelluksia, jotka ratkaisevat todellisia ongelmia. 
+      Nautin ongelmien ratkomisesta sekä puhtaan, skaalautuvan koodin kirjoittamisesta. 
+      Alla näet myös palveluitani jota voin toteuttaa sinulle, tai yrityksellesi omien toiveiden mukaan ja räätälöitynä!
+    </p>
+  </section>
+
+  <section id="palvelut">
+    <h2>Palveluni</h2>
+    <div class="palvelu-container">
+      <div class="palvelu-kortti">
+        <h3>🤖 <span>Asiakaspalvelu-botit (AI)</span></h3>
+        <p>Suunnittelen ja toteutan tekoälyllä toimivia asiakaspalvelubotteja, jotka voivat vastata automaattisesti kysymyksiin WhatsAppissa, nettisivulla tai missä vain!.</p>
+      <div class="keskita" style="margin-top: 2rem;">
+  <a href="#bot-esittely" class="cta-button">Lue lisää botista</a>
+</div>
+      </div>
+      <div class="palvelu-kortti">
+        <h3>🌐 <span>Verkkosivut yrityksille</span></h3>
+        <p>Rakennan nykyaikaisia ja responsiivisia verkkosivuja. Soveltuvat erinomaisesti yritysesittelyihin, portfolioihin tai palveluiden esittelyyn.</p>
+      </div>
+      <div class="palvelu-kortti">
+        <h3>📱 <span>Mobiilisovellukset</span></h3>
+        <p>Teen Android-sovelluksia React Nativella. Sovellukset voivat sisältää ilmoituksia, muistutuksia, tilaushallintaa tai mitä tahansa asiakkaasi tarvitsevat.</p>
+      </div>
+    </div>
+  </section>
+
+<section id="bot-esittely">
+  <div class="botti-kortti">
+    <h2>🤖 Älykäs asiakaspalvelubotti</h2>
+
+    <h3>Avaimet käteen -ratkaisuna yrityksellesi!</h3>
+    <p>Tarjoan yrityksellesi modernin asiakaspalvelubotin, joka toimii WhatsAppissa tai verkkosivullanne, juuri teidän tarpeisiinne räätälöitynä.</p>
+    <p>Tämä ei ole perinteinen “tarkoititko tätä?” -tyylinen botti, vaan aidosti älykäs, tekoälyyn pohjautuva keskustelija, joka ymmärtää kirjoitusvirheitä, murteita, slangia ja monimutkaisia kysymyksiä.</p>
+
+    <h3>Miten botti toimii?</h3>
+    <ul>
+      <li>• Vastata kysymyksiin automaattisesti yrityksesi omiin tietoihin pohjautuen (FAQ)</li>
+      <li>• Täydentää tietoa GPT-4o-tekoälyn avulla – kohteliaasti ja luonnollisella kielellä</li>
+      <li>• Tunnistaa puheen sävyjä ja tilanteita, ja ohjata asiakasta oikealle henkilölle tai sähköpostiin erikoistilanteissa</li>
+      <li>• Oppia uutta myöhemmin – botti ei ole koskaan “valmis” vaan kehittyvä</li>
+      <li>• Ja kyllä! Voimme asettaa botin monikieliseksi joka tunnistaa automaattisesti asiakkaan kielen.</li>
+    </ul>
+
+    <h3>Asiakas mukana kehityksessä alusta alkaen</h3>
+    <ul>
+      <li>• Sinä päätät, millainen sävy botilla on – rento, asiallinen, kysyy takaisin?...</li>
+      <li>• Kerrot, miten haluat botin käyttäytyvän erikoistilanteissa (esim. ohjaus ihmiselle ja miten)</li>
+      <li>• Määrittelemme yhdessä, mitä muistia ja tietoa botti oppii – esim. varausehdot, aikataulut, peruutukset…</li>
+    </ul>
+    <p>Lopputuloksena saat täysin brändiisi ja asiakaspalvelumalliisi sopivan ratkaisun.</p>
+
+    <h3>Mitä kiinteään pakettiin sisältyy</h3>
+    <ul>
+      <li>• Botin suunnittelu ja rakentaminen Node.js:llä ja OpenAI GPT-4o:lla</li>
+      <li>• FAQ-vastauslogiikka + fallback tekoälyyn</li>
+      <li>• WhatsApp Business API -integraatio (Meta)</li>
+      <li>• Click-to-chat-linkki ja QR-koodi käyttöön</li>
+      <li>• Meta Business Manager -prosessin avustus</li>
+      <li>• Ohjeet ja käyttöönotto</li>
+      <li>• Käyttövalmis toimitus omalle serverille tai kehityspalvelimelle (ngrok)</li>
+      <li>• Yksi testikierros ennen julkaisua</li>
+    </ul>
+
+    <h3>Testijakso</h3>
+    <p>Botin valmistuessa luovutan sen käyttöösi n. 2 viikon testijaksoksi.</p>
+    <ul>
+      <li>• Voitte jutella botin kanssa kuten asiakkaat</li>
+      <li>• Löytää tilanteita tai vastauksia, joita voidaan hienosäätää</li>
+      <li>• Tehdä viimeiset muutokset ennen virallista käyttöä</li>
+    </ul>
+
+    <h3>Hinnoittelu</h3>
+    <p><strong>Avaimet käteen -paketti: 690 € + alv</strong></p>
+
+    <h4>Ylläpito ja jatkokehitys:</h4>
+    <ul>
+      <li>• Minimi: 50 € / toimeksianto</li>
+      <li>• Tuntityö: 20 € / h</li>
+      <li>• Voimme myös sopia jatkuvasta ylläpidosta ja kehityksestä</li>
+    </ul>
+
+    <h4>Mahdollisia lisäkuluja: <span class="pienempi-teksti">(asiakas maksaa suoraan palveluntarjoajille, hinnat ovat tämän hetkisiä arvioita)</span></h4>
+    <ul>
+      <li>• OpenAI API: käytön mukaan (yleensä muutamia euroja / kk)</li>
+      <li>• Meta / WhatsApp API: ensimmäiset 1000 keskustelua / kk ilmaiseksi, sen jälkeen n. 0,06 € / keskustelu</li>
+      <li>• Serveri: asiakkaan oma palvelin tai tarjoan sen lisähintaan</li>
+    </ul>
+
+    <h3>Räätälöity juuri sinulle!</h3>
+    <p>Kaikki rakennetaan yrityksesi näköiseksi, olipa kyse sitten kielivalinnoista, brändisävystä, visuaalisesta tyylistä tai erityisvaatimuksista.</p>
+    <p>Jos haluat, botti voidaan myöhemmin opettaa:</p>
+    <ul>
+      <li>• Lukemaan yrityksesi verkkosivun sisältö automaattisesti</li>
+      <li>• Päivittämään tietoa dynaamisesti</li>
+      <li>• Tai mitä vain keksit, teen kaikkeni sinun tyytyväisyyden vuoksi!</li>
+    </ul>
+    <p><strong>Kilpailukykyinen hintani yhdistettynä tekoälypohjaiseen bottiin tekee tästä yhden tehokkaimmista asiakaspalveluratkaisuista markkinoilla.</strong></p>
+
+    <div class="keskita" style="margin-top: 2rem;">
+      <a href="#contact" class="cta-button">Ota yhteyttä ja pyydä botti</a>
+    </div>
+  </div>
+</section>
+
+<section id="miksi-valita">
+  <h2>🤔 Miksi valita tämä botti?</h2>
+  <div class="valinta-grid">
+    <div class="valintakortti">
+      <h4>1. Säästää aikaa ja rahaa heti</h4>
+      <p>Botti vastaa automaattisesti 24/7 – ei tarvetta ilta- tai viikonloppupäivystykselle.</p>
+    </div>
+    <div class="valintakortti">
+      <h4>2. Maksaa itsensä takaisin nopeasti</h4>
+      <p>Botti maksaa usein saman verran kuin yksi viikonloppuvuoro – mutta toimii aina.</p>
+    </div>
+    <div class="valintakortti">
+      <h4>3. Ei perusbotti – vaan älykäs</h4>
+      <p>Ymmärtää murteet, virheet ja slangin – kuulostaa brändillesi sopivalta.</p>
+    </div>
+    <div class="valintakortti">
+      <h4>4. Sinä päätät, miten botti käyttäytyy</h4>
+      <p>Valitset sävyn, toiminnan ja erikoistilanteet – täysin räätälöity.</p>
+    </div>
+    <div class="valintakortti">
+      <h4>5. Botti kehittyy jatkuvasti</h4>
+      <p>Voidaan opettaa lukemaan verkkosivuja, päivittymään ja kasvamaan.</p>
+    </div>
+    <div class="valintakortti">
+      <h4>6. Testikäyttö ennen julkaisua</h4>
+      <p>2 viikon testijakso – kokeile, hio ja varmista toimivuus.</p>
+    </div>
+    <div class="valintakortti">
+      <h4>7. Kiinteä hinta – ei yllätyksiä</h4>
+      <p>Koko paketti 690 € + alv. Päivitykset alk. 50 € tai 20 €/h.</p>
+    </div>
+    <div class="valintakortti">
+      <h4>8. Markkinoiden edullisin ratkaisu</h4>
+      <p>Ei piilokuluja, ei kuukausimaksuja – vain käyttöön perustuvat maksut.</p>
+    </div>
+  </div>
+</section>
+
+
+
+  <section id="tyotapa">
+  <h2>Miten työskentelen</h2>
+  <p class="intro-text">
+    Ota rohkeasti yhteyttä sähköpostitse! Voimme sopia tarkemmin ja suunnitella yhdessä juuri sinun tarpeisiisi sopivan asiakaspalvelubotin, verkkosivun tai mobiilisovelluksen.
+  </p>
+
+  <ul class="tyotapa-lista">
+    <li>💬 Aluksi käymme läpi tarpeesi ja toiveesi</li>
+    <li>🛠 Suunnittelen ja esittelen ehdotuksen teknisestä toteutuksesta</li>
+    <li>🚀 Aloitan kehitystyön ja pidän sinut ajan tasalla, sekä ehdotan ja vastaanotan kehitysideoita</li>
+    <li>✅ Lopuksi saat valmiin ratkaisun edullisesti ja avaimet käteen -periaatteella! 
+  Tarvittaessa voidaan sopia myös jatkokehityksestä, ylläpidosta ja lisätoiminnoista, täysin joustavasti tarpeidesi mukaan!</li>
+  </ul>
+
+
+
+  <p class="cta-teksti">
+    Työskentelen nopeasti, luotettavasti ja aina kilpailukykyisellä hinnalla. ✨  
+    Ota rohkeasti yhteyttä ja pyydä maksuton arvio!
+  </p>
+
+  <div class="keskita">
+    <a href="#contact" class="cta-button">Ota yhteyttä</a>
+  </div>
+</section>
+
+ <section id="contact">
+  <h2>Ota yhteyttä</h2>
+  <p class="contact-text">Sähköposti: <span class="email-plain">lashoppys@gmail.com</span></p>
+</section>
+
+
+  <!-- Particles.js -->
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <script>
+    particlesJS("particles-js", {
+      "particles": {
+        "number": {
+          "value": 60,
+          "density": { "enable": true, "value_area": 800 }
+        },
+        "color": { "value": "#00e6e6" },
+        "shape": { "type": "circle" },
+        "opacity": { "value": 0.5, "random": true },
+        "size": { "value": 3, "random": true },
+        "line_linked": {
+          "enable": true,
+          "distance": 150,
+          "color": "#00e6e6",
+          "opacity": 0.4,
+          "width": 1
+        },
+        "move": {
+          "enable": true,
+          "speed": 0.3,
+          "direction": "none",
+          "out_mode": "out"
+        }
+      },
+      "interactivity": {
+        "events": {
+          "onhover": { "enable": true, "mode": "repulse" },
+          "onclick": { "enable": true, "mode": "push" }
+        },
+        "modes": {
+          "repulse": { "distance": 100 },
+          "push": { "particles_nb": 4 }
+        }
+      },
+      "retina_detect": true
+    });
+  </script>
+</body>
+</html>
