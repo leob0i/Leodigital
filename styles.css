@@ -450,3 +450,131 @@ html {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
+#chat-widget {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-family: 'Segoe UI', sans-serif;
+  z-index: 9999;
+}
+
+#chat-toggle {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 24px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease;
+}
+
+#chat-toggle:hover {
+  background-color: #45a049;
+}
+
+#chat-toggle.close-mode {
+  background-color: white;
+  color: red;
+  border: 1px solid #ccc;
+}
+
+#chat-box {
+  width: 360px;
+  height: 500px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+  z-index: 1000;
+}
+
+#chat-box.active {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#chat-header {
+  background: linear-gradient(to right, #a84be3, #8e2de2);
+  color: white;
+  padding: 15px;
+  font-weight: bold;
+  text-align: center;
+  font-size: 16px;
+}
+
+#chat-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #f1f1f1;
+}
+
+#chat-input-area {
+  display: flex;
+  padding: 10px;
+  background-color: #fff;
+  border-top: 1px solid #ddd;
+}
+
+#chat-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  font-size: 14px;
+  margin-right: 10px;
+}
+
+#send-chat {
+  padding: 10px 14px;
+  background-color: #a84be3;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+#send-chat:hover {
+  background-color: #8e2de2;
+}
+
+.message {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.message.user {
+  align-self: flex-end;
+  background-color: #a84be3;
+  color: white;
+  border-bottom-right-radius: 0;
+}
+
+.message.bot {
+  align-self: flex-start;
+  background-color: #eee;
+  color: black;
+  border-bottom-left-radius: 0;
+}
+
