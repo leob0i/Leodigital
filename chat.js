@@ -24,22 +24,46 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  sendBtn.onclick = () => {
-    const userMsg = input.value.trim();
-    if (!userMsg) return;
+sendBtn.onclick = async () => {
+  const userMsg = input.value.trim();
+  if (!userMsg) return;
 
-    const userDiv = document.createElement('div');
-    userDiv.className = 'message user';
-    userDiv.textContent = userMsg;
-    messages.appendChild(userDiv);
-    input.value = '';
+  // Näytä käyttäjän viesti
+  const userDiv = document.createElement('div');
+  userDiv.className = 'message user';
+  userDiv.textContent = userMsg;
+  messages.appendChild(userDiv);
+  input.value = '';
 
-    setTimeout(() => {
-      const botDiv = document.createElement('div');
-      botDiv.className = 'message bot';
-      botDiv.textContent = 'Hei! Tämä on testi 😄';
-      messages.appendChild(botDiv);
-      messages.scrollTop = messages.scrollHeight;
-    }, 500);
-  };
+  // Scrollaa alas
+  messages.scrollTop = messages.scrollHeight;
+
+  try {
+    // Lähetä viesti bottisi backendiin
+    const response = await fetch("https://leobot-gpaj.onrender.com", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ message: userMsg })
+    });
+
+    const data = await response.json();
+
+    // Näytä botin vastaus
+    const botDiv = document.createElement('div');
+    botDiv.className = 'message bot';
+    botDiv.textContent = data.reply || "Virhe: ei vastausta.";
+    messages.appendChild(botDiv);
+    messages.scrollTop = messages.scrollHeight;
+  } catch (error) {
+    console.error("Virhe palvelimessa:", error);
+    const botDiv = document.createElement('div');
+    botDiv.className = 'message bot';
+    botDiv.textContent = "Tapahtui virhe. Yritä myöhemmin uudelleen.";
+    messages.appendChild(botDiv);
+    messages.scrollTop = messages.scrollHeight;
+  }
+};
+
 });
