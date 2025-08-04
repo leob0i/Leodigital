@@ -450,10 +450,11 @@ html {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
 }
-#chat-widget {
+ #chat-widget {
   position: fixed;
   bottom: 20px;
-  right: 20px;
+  right: 20px !important;
+  left: auto !important;
   font-family: 'Segoe UI', sans-serif;
   z-index: 9999;
 }
@@ -577,4 +578,5 @@ html {
   color: black;
   border-bottom-left-radius: 0;
 }
+
 
