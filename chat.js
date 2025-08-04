@@ -40,7 +40,8 @@ sendBtn.onclick = async () => {
 
   try {
     // Lähetä viesti bottisi backendiin
-const response = await fetch("https://leobot-gpaj.onrender.com/bot", {
+const response = await fetch("https://leobot-gpaj.onrender.com/webchat", {
+
 
       method: "POST",
       headers: {
