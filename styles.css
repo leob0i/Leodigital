@@ -535,10 +535,10 @@ html {
 
 #chat-input {
   flex: 1;
-  padding: 10px;
+  padding: 12px;
   border: 1px solid #ccc;
   border-radius: 20px;
-  font-size: 14px;
+  font-size: 16px; /* tämä on tärkein */
   margin-right: 10px;
 }
 
@@ -586,5 +586,6 @@ html {
   font-family: 'Segoe UI', sans-serif;
   z-index: 9999;
 }
+
 
 
