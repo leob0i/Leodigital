@@ -578,5 +578,13 @@ html {
   color: black;
   border-bottom-left-radius: 0;
 }
+#chat-widget {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  font-family: 'Segoe UI', sans-serif;
+  z-index: 9999;
+}
 
 
