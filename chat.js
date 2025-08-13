@@ -24,14 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  // --- LISÄYS: pieni apuri aikaleimalle (HH:MM) ---
+  // --- Aikaleima (HH:MM) ---
   function formatTime(date = new Date()) {
     const h = String(date.getHours()).padStart(2, '0');
     const m = String(date.getMinutes()).padStart(2, '0');
     return `${h}:${m}`;
   }
 
-  // --- LISÄYS: Typing-indikaattori ---
+  // --- Typing-indikaattori ---
   function showTyping() {
     const wrap = document.createElement('div');
     wrap.className = 'message bot';
@@ -46,42 +46,87 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el && el.parentNode) el.parentNode.removeChild(el);
   }
 
-  sendBtn.onclick = () => {
+  // Pura vastausavaimista (reply/message/text/answer/response/output…)
+  function pickReply(data) {
+    if (typeof data === 'string') return data;
+    const keys = ['reply','message','text','answer','response','output','botReply'];
+    for (const k of keys) {
+      const v = data?.[k];
+      if (typeof v === 'string' && v.trim()) return v.trim();
+      if (v && typeof v === 'object') {
+        for (const kk of keys) {
+          const vv = v?.[kk];
+          if (typeof vv === 'string' && vv.trim()) return vv.trim();
+        }
+      }
+    }
+    return null;
+  }
+
+  // --- Lähetys backendille ---
+  sendBtn.onclick = async () => {
     const userMsg = input.value.trim();
     if (!userMsg) return;
 
+    // käyttäjän kupla + aikaleima
     const userDiv = document.createElement('div');
     userDiv.className = 'message user';
     userDiv.textContent = userMsg;
-
-    // --- LISÄYS: aikaleima käyttäjän viestiin ---
     const userTs = document.createElement('span');
     userTs.className = 'timestamp';
     userTs.textContent = formatTime();
     userDiv.appendChild(userTs);
-
     messages.appendChild(userDiv);
+
     input.value = '';
 
-    // --- Typing näkyviin botille ---
     const typingEl = showTyping();
 
-    setTimeout(() => {
-      // Poista typing ennen vastausta
+    try {
+      const response = await fetch('https://leobot-gpaj.onrender.com/webchat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMsg })  // muuta avain jos backend odottaa toista nimeä
+      });
+
+      let botText = '';
+      const ct = response.headers.get('content-type') || '';
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+      }
+      if (ct.includes('application/json')) {
+        const data = await response.json();
+        botText = pickReply(data) ?? JSON.stringify(data);
+      } else {
+        botText = (await response.text()) || '';
+      }
+
       removeTyping(typingEl);
 
       const botDiv = document.createElement('div');
       botDiv.className = 'message bot';
-      botDiv.textContent = 'Hei! Tämä on testi 😄';
-
-      // --- LISÄYS: aikaleima botin viestiin ---
+      botDiv.textContent = botText || '…(tyhjä vastaus)';
       const botTs = document.createElement('span');
       botTs.className = 'timestamp';
       botTs.textContent = formatTime();
       botDiv.appendChild(botTs);
-
       messages.appendChild(botDiv);
       messages.scrollTop = messages.scrollHeight;
-    }, 500);
+
+    } catch (err) {
+      removeTyping(typingEl);
+
+      const botDiv = document.createElement('div');
+      botDiv.className = 'message bot';
+      botDiv.textContent = 'Virhe yhteydessä palvelimeen. Yritä hetken päästä uudelleen.';
+      const botTs = document.createElement('span');
+      botTs.className = 'timestamp';
+      botTs.textContent = formatTime();
+      botDiv.appendChild(botTs);
+      messages.appendChild(botDiv);
+      messages.scrollTop = messages.scrollHeight;
+      console.error('[chat] fetch error:', err);
+    }
   };
 });
+
