@@ -10,20 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
   toggleBtn.textContent = '💬';
   toggleBtn.classList.remove('close-mode');
 
-  toggleBtn.onclick = () => {
-    const isVisible = chatBox.classList.contains('active');
-
-    if (isVisible) {
-      chatBox.classList.remove('active');
-      toggleBtn.textContent = '💬';
-      toggleBtn.classList.remove('close-mode');
-    } else {
-      chatBox.classList.add('active');
-      toggleBtn.textContent = '❌';
-      toggleBtn.classList.add('close-mode');
-    }
-  };
-
   // --- Aikaleima (HH:MM) ---
   function formatTime(date = new Date()) {
     const h = String(date.getHours()).padStart(2, '0');
@@ -46,7 +32,50 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el && el.parentNode) el.parentNode.removeChild(el);
   }
 
-  // Pura vastausavaimista (reply/message/text/answer/response/output…)
+  // --- Pieni apuri: luo botin viestikupla aikaleimalla ---
+  function addBotMessage(text) {
+    const botDiv = document.createElement('div');
+    botDiv.className = 'message bot';
+    botDiv.textContent = text || '';
+    const ts = document.createElement('span');
+    ts.className = 'timestamp';
+    ts.textContent = formatTime();
+    botDiv.appendChild(ts);
+    messages.appendChild(botDiv);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  // --- Tervehdys ensimmäisellä avauksella (vain kerran / välilehti) ---
+  function welcomeIfNeeded() {
+    if (sessionStorage.getItem('chatWelcomed') === '1') return;
+    const typingEl = showTyping();
+    setTimeout(() => {
+      removeTyping(typingEl);
+      // Voit vaihtaa tekstin haluamaksesi:
+      addBotMessage('Hei! Miten voin auttaa? 🙂');
+      sessionStorage.setItem('chatWelcomed', '1');
+    }, 600);
+  }
+
+  // Avaa/sulje
+  toggleBtn.onclick = () => {
+    const isVisible = chatBox.classList.contains('active');
+
+    if (isVisible) {
+      chatBox.classList.remove('active');
+      toggleBtn.textContent = '💬';
+      toggleBtn.classList.remove('close-mode');
+    } else {
+      chatBox.classList.add('active');
+      toggleBtn.textContent = '❌';
+      toggleBtn.classList.add('close-mode');
+
+      // <<< UUSI: tervehdi vain ensimmäisellä avauksella >>>
+      welcomeIfNeeded();
+    }
+  };
+
+  // --- Vastausavainten haku (sama kuin aiemmin) ---
   function pickReply(data) {
     if (typeof data === 'string') return data;
     const keys = ['reply','message','text','answer','response','output','botReply'];
@@ -86,14 +115,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const response = await fetch('https://leobot-gpaj.onrender.com/webchat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg })  // muuta avain jos backend odottaa toista nimeä
+        body: JSON.stringify({ message: userMsg }) // muuta avain jos backend odottaa toista
       });
 
       let botText = '';
       const ct = response.headers.get('content-type') || '';
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       if (ct.includes('application/json')) {
         const data = await response.json();
         botText = pickReply(data) ?? JSON.stringify(data);
@@ -102,31 +129,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       removeTyping(typingEl);
-
-      const botDiv = document.createElement('div');
-      botDiv.className = 'message bot';
-      botDiv.textContent = botText || '…(tyhjä vastaus)';
-      const botTs = document.createElement('span');
-      botTs.className = 'timestamp';
-      botTs.textContent = formatTime();
-      botDiv.appendChild(botTs);
-      messages.appendChild(botDiv);
-      messages.scrollTop = messages.scrollHeight;
-
+      addBotMessage(botText || '…(tyhjä vastaus)');
     } catch (err) {
       removeTyping(typingEl);
-
-      const botDiv = document.createElement('div');
-      botDiv.className = 'message bot';
-      botDiv.textContent = 'Virhe yhteydessä palvelimeen. Yritä hetken päästä uudelleen.';
-      const botTs = document.createElement('span');
-      botTs.className = 'timestamp';
-      botTs.textContent = formatTime();
-      botDiv.appendChild(botTs);
-      messages.appendChild(botDiv);
-      messages.scrollTop = messages.scrollHeight;
+      addBotMessage('Virhe yhteydessä palvelimeen. Yritä hetken päästä uudelleen.');
       console.error('[chat] fetch error:', err);
     }
   };
 });
-
