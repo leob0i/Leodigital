@@ -1,139 +1,185 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const toggleBtn = document.getElementById('chat-toggle');
-  const chatBox = document.getElementById('chat-box');
-  const sendBtn = document.getElementById('send-chat');
-  const input = document.getElementById('chat-input');
-  const messages = document.getElementById('chat-messages');
+// chat.js
+// Vaatii seuraavat elementit HTML:ssä:
+// #chat-widget, #chat-toggle, #chat-box, #chat-messages, #chat-input, #send-chat
+// CSS:ssä olet ennestään .close-mode -luokka ikoninvaihtoon (💬 <-> ❌),
+// ja #chat-boxille slide-up -animaatiot (transform/opacity/pointer-events).
 
-  // Asetetaan chat piiloon varmasti
-  chatBox.classList.remove('active');
-  toggleBtn.textContent = '💬';
-  toggleBtn.classList.remove('close-mode');
+(() => {
+  "use strict";
 
-  // --- Aikaleima (HH:MM) ---
-  function formatTime(date = new Date()) {
-    const h = String(date.getHours()).padStart(2, '0');
-    const m = String(date.getMinutes()).padStart(2, '0');
-    return `${h}:${m}`;
+  const API_URL = "https://leobot-gpaj.onrender.com/webchat";
+
+  // ---- Elementit ----
+  const toggleBtn     = document.getElementById("chat-toggle");
+  const chatBox       = document.getElementById("chat-box");
+  const chatMessages  = document.getElementById("chat-messages");
+  const chatInput     = document.getElementById("chat-input");
+  const sendBtn       = document.getElementById("send-chat");
+
+  if (!toggleBtn || !chatBox || !chatMessages || !chatInput || !sendBtn) {
+    console.error("[chat.js] Puuttuvia elementtejä. Tarkista ID:t.");
+    return;
   }
 
-  // --- Typing-indikaattori ---
-  function showTyping() {
-    const wrap = document.createElement('div');
-    wrap.className = 'message bot';
-    const dots = document.createElement('span');
-    dots.className = 'dots';
-    dots.innerHTML = '<i></i><i></i><i></i>';
-    wrap.appendChild(dots);
-    messages.appendChild(wrap);
-    return wrap;
-  }
-  function removeTyping(el) {
-    if (el && el.parentNode) el.parentNode.removeChild(el);
-  }
-
-  // --- Pieni apuri: luo botin viestikupla aikaleimalla ---
-  function addBotMessage(text) {
-    const botDiv = document.createElement('div');
-    botDiv.className = 'message bot';
-    botDiv.textContent = text || '';
-    const ts = document.createElement('span');
-    ts.className = 'timestamp';
-    ts.textContent = formatTime();
-    botDiv.appendChild(ts);
-    messages.appendChild(botDiv);
-    messages.scrollTop = messages.scrollHeight;
-  }
-
-  // --- Tervehdys ensimmäisellä avauksella (vain kerran / välilehti) ---
-  function welcomeIfNeeded() {
-    if (sessionStorage.getItem('chatWelcomed') === '1') return;
-    const typingEl = showTyping();
-    setTimeout(() => {
-      removeTyping(typingEl);
-      // Voit vaihtaa tekstin haluamaksesi:
-      addBotMessage('Hei! Miten voin auttaa? 🙂');
-      sessionStorage.setItem('chatWelcomed', '1');
-    }, 600);
-  }
-
-  // Avaa/sulje
-  toggleBtn.onclick = () => {
-    const isVisible = chatBox.classList.contains('active');
-
-    if (isVisible) {
-      chatBox.classList.remove('active');
-      toggleBtn.textContent = '💬';
-      toggleBtn.classList.remove('close-mode');
-    } else {
-      chatBox.classList.add('active');
-      toggleBtn.textContent = '❌';
-      toggleBtn.classList.add('close-mode');
-
-      // <<< UUSI: tervehdi vain ensimmäisellä avauksella >>>
-      welcomeIfNeeded();
-    }
+  // ---- Apurit ----
+  const scrollToBottom = () => {
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   };
 
-  // --- Vastausavainten haku (sama kuin aiemmin) ---
-  function pickReply(data) {
-    if (typeof data === 'string') return data;
-    const keys = ['reply','message','text','answer','response','output','botReply'];
-    for (const k of keys) {
-      const v = data?.[k];
-      if (typeof v === 'string' && v.trim()) return v.trim();
-      if (v && typeof v === 'object') {
-        for (const kk of keys) {
-          const vv = v?.[kk];
-          if (typeof vv === 'string' && vv.trim()) return vv.trim();
-        }
-      }
+  const addMessage = (text, who /* 'user' | 'bot' */) => {
+    const div = document.createElement("div");
+    div.className = `message ${who}`;
+    div.textContent = String(text ?? "");
+    chatMessages.appendChild(div);
+    scrollToBottom();
+  };
+
+  const addUser = (text) => addMessage(text, "user");
+  const addBot  = (text) => addMessage(text, "bot");
+
+  const getOrCreateSessionId = () => {
+    let id = localStorage.getItem("webchat_session");
+    if (!id) {
+      id = (crypto.randomUUID?.() ?? Date.now() + Math.random().toString(16).slice(2));
+      localStorage.setItem("webchat_session", id);
     }
-    return null;
-  }
+    return id;
+  };
 
-  // --- Lähetys backendille ---
-  sendBtn.onclick = async () => {
-    const userMsg = input.value.trim();
-    if (!userMsg) return;
+  // ---- Auki/Kiinni ----
+  let isOpen = false;
 
-    // käyttäjän kupla + aikaleima
-    const userDiv = document.createElement('div');
-    userDiv.className = 'message user';
-    userDiv.textContent = userMsg;
-    const userTs = document.createElement('span');
-    userTs.className = 'timestamp';
-    userTs.textContent = formatTime();
-    userDiv.appendChild(userTs);
-    messages.appendChild(userDiv);
+  const openChat = () => {
+    // Näytä laatikko (pidetään JS:llä hallinta, ettei rikota olemassa olevaa CSS:ää)
+    chatBox.style.transform = "translateY(0)";
+    chatBox.style.opacity = "1";
+    chatBox.style.pointerEvents = "auto";
+    toggleBtn.classList.add("close-mode");
+    isOpen = true;
+  };
 
-    input.value = '';
+  const closeChat = () => {
+    // Piilota laatikko
+    chatBox.style.transform = "translateY(16px)";
+    chatBox.style.opacity = "0";
+    chatBox.style.pointerEvents = "none";
+    toggleBtn.classList.remove("close-mode");
+    isOpen = false;
+  };
 
-    const typingEl = showTyping();
+  // Alkuasento: kiinni (jos CSS ei jo hoida tätä, JS varmistaa)
+  closeChat();
 
+  // ---- Tervetuloviesti (kerran per sivulataus) ----
+  const greetOnce = async () => {
+    if (sessionStorage.getItem("webchat_greeted") === "1") return;
+
+    // Yritetään ensin backend-tervehdystä
     try {
-      const response = await fetch('https://leobot-gpaj.onrender.com/webchat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg }) // muuta avain jos backend odottaa toista
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event: "webchat_open",
+          sessionId: getOrCreateSessionId()
+        })
       });
 
-      let botText = '';
-      const ct = response.headers.get('content-type') || '';
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      if (ct.includes('application/json')) {
-        const data = await response.json();
-        botText = pickReply(data) ?? JSON.stringify(data);
-      } else {
-        botText = (await response.text()) || '';
+      let data = {};
+      try { data = await res.json(); } catch (_) {}
+
+      const welcome =
+        data?.welcome ??
+        data?.reply ??
+        data?.message ??
+        data?.greeting ??
+        null;
+
+      if (welcome) {
+        addBot(welcome);
+        sessionStorage.setItem("webchat_greeted", "1");
+        return;
+      }
+    } catch (_) {
+      // Pudotaan oletustervehdykseen
+    }
+
+    // Oletustervehdys
+    addBot("Hei! 👋 Olen Leo Digital Bot. Kysy rohkeasti — autan 24/7.");
+    sessionStorage.setItem("webchat_greeted", "1");
+  };
+
+  // ---- Lähetys ----
+  const setInputEnabled = (enabled) => {
+    chatInput.disabled = !enabled;
+    sendBtn.disabled = !enabled;
+  };
+
+  const sendCurrentMessage = async () => {
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    addUser(text);
+    chatInput.value = "";
+    setInputEnabled(false);
+
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: text,
+          channel: "web",
+          sessionId: getOrCreateSessionId()
+        })
+      });
+
+      let data = {};
+      try { data = await res.json(); } catch (_) {}
+
+      let reply =
+        data?.reply ??
+        data?.message ??
+        data?.answer ??
+        data?.text ??
+        null;
+
+      if (Array.isArray(reply)) reply = reply.join("\n");
+      if (!reply || typeof reply !== "string" || !reply.trim()) {
+        reply = "Pahoittelut, en saanut vastausta juuri nyt.";
       }
 
-      removeTyping(typingEl);
-      addBotMessage(botText || '…(tyhjä vastaus)');
+      addBot(reply);
     } catch (err) {
-      removeTyping(typingEl);
-      addBotMessage('Virhe yhteydessä palvelimeen. Yritä hetken päästä uudelleen.');
-      console.error('[chat] fetch error:', err);
+      addBot("Hups, yhteys katkesi. Yritä pian uudelleen.");
+    } finally {
+      setInputEnabled(true);
+      chatInput.focus();
     }
   };
-});
+
+  // ---- Tapahtumat ----
+  toggleBtn.addEventListener("click", () => {
+    if (isOpen) {
+      closeChat();
+      return;
+    }
+    openChat();
+    // Odotetaan hetki, että avausanimaatio ehtii, sitten tervehdys (vain kerran per sivulataus)
+    setTimeout(greetOnce, 250);
+  });
+
+  sendBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    sendCurrentMessage();
+  });
+
+  chatInput.addEventListener("keydown", (e) => {
+    // Enter lähettää, Shift+Enter tekee rivinvaihdon
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendCurrentMessage();
+    }
+  });
+})();
+
