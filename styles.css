@@ -617,3 +617,20 @@ html {
 .message.bot .timestamp {
   color: #555;
 }
+/* CHAT – sijainti ja väli (suositus) */
+#chat-toggle {
+  position: fixed !important;
+  right: 20px !important;
+  bottom: 20px !important;  /* napin etäisyys reunasta */
+  left: auto !important;
+  top: auto !important;
+  z-index: 10001 !important;
+}
+
+#chat-box {
+  position: fixed !important;
+  right: 20px !important;
+  bottom: 90px !important;  /* 20 + 56 + 14 = sweet spot */
+  z-index: 10000 !important;
+}
+
