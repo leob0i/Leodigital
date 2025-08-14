@@ -70,10 +70,42 @@
   // Alkuasento: kiinni (jos CSS ei jo hoida tätä, JS varmistaa)
   closeChat();
 
-  // ---- Tervetuloviesti (aina lokaalisti, kerran per sivulataus) ----
-  const greetOnce = () => {
+  // ---- Tervetuloviesti (kerran per sivulataus) ----
+  const greetOnce = async () => {
     if (sessionStorage.getItem("webchat_greeted") === "1") return;
-    addBot("Hei! 👋 Olen Leo Digital Bot. Kysy rohkeasti — autan 24/7.");
+
+    // Yritetään ensin backend-tervehdystä
+    try {
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event: "webchat_open",
+          sessionId: getOrCreateSessionId()
+        })
+      });
+
+      let data = {};
+      try { data = await res.json(); } catch (_) {}
+
+      const welcome =
+        data?.welcome ??
+        data?.reply ??
+        data?.message ??
+        data?.greeting ??
+        null;
+
+      if (welcome) {
+        addBot(welcome);
+        sessionStorage.setItem("webchat_greeted", "1");
+        return;
+      }
+    } catch (_) {
+      // Pudotaan oletustervehdykseen
+    }
+
+    // Oletustervehdys
+    addBot("Hei! 👋 Olen Leo Digital Bot. Miten voin auttaa?");
     sessionStorage.setItem("webchat_greeted", "1");
   };
 
